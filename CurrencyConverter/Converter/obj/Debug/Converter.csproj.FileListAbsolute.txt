@@ -1,6 +1,0 @@
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\bin\Debug\Converter.exe.config
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\bin\Debug\Converter.exe
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\bin\Debug\Converter.pdb
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\obj\Debug\Converter.csprojResolveAssemblyReference.cache
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\obj\Debug\Converter.exe
-C:\Users\Stamo Petkov\Documents\Visual Studio 2012\Projects\CurrencyConverter\Converter\obj\Debug\Converter.pdb
