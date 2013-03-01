@@ -56,12 +56,14 @@ namespace Converter
                 {
                     value = "EUR";
                 }
+                value = value.ToUpper();
                 CheckCurrency(value);
                 this.baseCurrency = value;
                 decimal factor = this.exchangeRates[this.baseCurrency];
-                foreach (KeyValuePair<string, decimal> kvp in this.exchangeRates)
+                List<string> keys = new List<string>(this.exchangeRates.Keys);
+                foreach (string key in keys)
                 {
-                    this.exchangeRates[kvp.Key] /= factor; 
+                    this.exchangeRates[key] /= factor; 
                 }
             }
         }
@@ -103,7 +105,7 @@ namespace Converter
                             }
                             catch (FormatException fe)
                             {
-                                throw new FormatException("Urecognised rate format!", fe);
+                                throw new FormatException("Urecognised format!", fe);
                             }
                             this.exchangeRates.Add(currency, rate); //ads currency and rate to exchange rate table
                         }
@@ -152,6 +154,8 @@ namespace Converter
             {
                 to = this.baseCurrency;
             }
+            from = from.ToUpper();
+            to = to.ToUpper();
             CheckCurrency(from);
             CheckCurrency(to);
             result = ammount * this.exchangeRates[to] / this.exchangeRates[from];
@@ -171,6 +175,8 @@ namespace Converter
             {
                 to = this.baseCurrency;
             }
+            from = from.ToUpper();
+            to = to.ToUpper();
             CheckCurrency(from);
             CheckCurrency(to);
             result = this.exchangeRates[to] / this.exchangeRates[from];
@@ -178,11 +184,11 @@ namespace Converter
         }
 
        //Gets the rates table based on Base currency
-       //param List<string> currencyList - list of Currencies to be included in the table. All currencies by default
+       //param string currencyList - list of comma delimited Currencies to be included in the table. All currencies by default
        //returns Dictionary<string, decimal> containing desired currencies and rates
        //Throws ApplicationException if currency is not in currency list
 
-        public Dictionary<string, decimal> GetRatesTable(List<string> currencyList = null)
+        public Dictionary<string, decimal> GetRatesTable(string currencyList = null)
         {
             if (currencyList == null)
             {
@@ -191,8 +197,12 @@ namespace Converter
             else 
             {
                 Dictionary<string, decimal> result = new Dictionary<string, decimal>();
-                foreach (string currency in currencyList)
+                currencyList = currencyList.ToUpper();
+                char[] delimiter = {',', ' ', ';'}; //just in case some one don't know what comma delimited is
+                string[] list = currencyList.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string currency in list)
                 {
+                    currency.Trim();
                     CheckCurrency(currency);
                     result.Add(currency, this.exchangeRates[currency]);
                 }
@@ -200,16 +210,16 @@ namespace Converter
             }
         }
 
-        //Gets the list of currencies
+        //Gets the list of currencies. If sorted is true, the returned list is sorted. False by default
         //returns List<string> of all available currencies 
 
-        public List<string> GetCurrencyList()
+        public List<string> GetCurrencyList(bool sorted = false)
         {
-            List<string> currencyList = new List<string>();
-            foreach (KeyValuePair<string, decimal> kvp in this.exchangeRates)
+            List<string> currencyList = new List<string>(this.exchangeRates.Keys);
+            if (sorted)
             {
-                currencyList.Add(kvp.Key);
-            }
+                currencyList.Sort();
+            } 
             return currencyList;
         }
     }
