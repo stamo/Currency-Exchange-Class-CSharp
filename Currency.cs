@@ -140,14 +140,14 @@ namespace Converter
             }
         }
 
-       //Exchanges the givven ammount from one currency to the other
-       //param Decimal ammount The ammount to be exchanged
-       //param String from Currency of the ammount (three letter code)
+       //Exchanges the givven amount from one currency to the other
+       //param Decimal amount The amount to be exchanged
+       //param String from Currency of the amount (three letter code)
        //param String to Currency to witch we wish to exchange. Base currency if not specified.
-       //returns Decimal - the exchanged ammount on success
+       //returns Decimal - the exchanged amount on success
        //Throws ApplicationException if currency is not in currency list
 
-        public decimal Exchange(decimal ammount, string from, string to = null)
+        public decimal Exchange(decimal amount, string from, string to = null)
         {
             decimal result = 0M;
             if (to == null)
@@ -158,7 +158,7 @@ namespace Converter
             to = to.ToUpper();
             CheckCurrency(from);
             CheckCurrency(to);
-            result = ammount * this.exchangeRates[to] / this.exchangeRates[from];
+            result = amount * this.exchangeRates[to] / this.exchangeRates[from];
             return result;
         }
 
