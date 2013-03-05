@@ -48,23 +48,19 @@ Return: the cross rate on success
 
 Exceptions: Throws ApplicationException if currency code is not in currency list
 
-`public Dictionary<string, decimal> GetRatesTable(string currencyList = null)` 
-This method generates a replica of rates table based on Base currency. You can specify the list of currencies you need. You can use it for display or calculation purposes. 
+`public IEnumerable<KeyValuePair<string, string>> GetRatesTable(string currencyList = null)` 
+This method generates a replica of rates table based on Base currency. You can specify the list of currencies you need. You can use it for display purposes. 
 
 Parameters: `currencyList ` comma separated list of Currencies to be included in the table. All currencies by default. In general you want need to show all currencies provided by ECB, so you can choose which to show by submitting a string list with currency codes.
 
-Return: Dictionary containing exchange rates. 
-Exceptions: Throws ApplicationException if some of currency cods are not in currency list
+Return: IEnumerable<KeyValuePair<string, string>> which contains currency code as key and rate as value in format 0.0000. 
+Exceptions: Throws ApplicationException if some of currency codes are not in currency list
 
-`public List<string> GetCurrencyList(bool sorted = false)`
+`public IEnumerable<string> GetCurrencyList(bool sorted = false)`
 This method gets the list of available currencies. If you are not sure which code to use, call this method and it will return a list of currency codes.
 
 Parameters: `sorted` if this parameter is true, the list will be sorted. False by default.
-Return: List of all available currencies
-
-ToDo
------------
-I wish to make this class a little more abstract and may be add an Interface 
+Return: List of all available currencies 
 
 Legal
 ------------
