@@ -6,12 +6,12 @@ using System.Threading;
 using System.Globalization;
 using System.Xml;
 
-namespace Converter
+namespace CurrencyConverter
 {
  
  //This class contains some functions to manipulate currencies.
  //It gets information from the servers of European Central Bank.
- //To get list of available currencies, please use GetCurrencyList() method, the return type is List<string>.
+ //To get list of available currencies, please use GetCurrencyList() method, the return type is IEnumerable<string>.
  //On construction the XML file is parsed, if something goes wrong Exeption will be thrown(WebException, FormatException or XmlException).
  //Even if there is no connection to ECB servers, default value is created for BGN / EUR convertion (the rate is constant).
  //@author Stamo Petkov
@@ -19,7 +19,7 @@ namespace Converter
  //@name Currency
  
 
-    public class Currency
+    public class Currency : ICurrencyConverter
     {
         private string sourceUrl = @"http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
         private XmlTextReader xml;
@@ -57,6 +57,7 @@ namespace Converter
                     value = "EUR";
                 }
                 value = value.ToUpper();
+                value = value.Trim();
                 CheckCurrency(value);
                 this.baseCurrency = value;
                 decimal factor = this.exchangeRates[this.baseCurrency];
@@ -154,8 +155,8 @@ namespace Converter
             {
                 to = this.baseCurrency;
             }
-            from = from.ToUpper();
-            to = to.ToUpper();
+            from = from.ToUpper().Trim();
+            to = to.ToUpper().Trim();
             CheckCurrency(from);
             CheckCurrency(to);
             result = amount * this.exchangeRates[to] / this.exchangeRates[from];
@@ -175,8 +176,8 @@ namespace Converter
             {
                 to = this.baseCurrency;
             }
-            from = from.ToUpper();
-            to = to.ToUpper();
+            from = from.ToUpper().Trim();
+            to = to.ToUpper().Trim();
             CheckCurrency(from);
             CheckCurrency(to);
             result = this.exchangeRates[to] / this.exchangeRates[from];
@@ -184,36 +185,39 @@ namespace Converter
         }
 
        //Gets the rates table based on Base currency
-       //param string currencyList - list of comma delimited Currencies to be included in the table. All currencies by default
-       //returns Dictionary<string, decimal> containing desired currencies and rates
+       //param string currencyList - list of comma separated Currencies to be included in the table. All currencies by default
+       //returns IEnumerable<KeyValuePair<string, string>> containing desired currencies and rates
        //Throws ApplicationException if currency is not in currency list
 
-        public Dictionary<string, decimal> GetRatesTable(string currencyList = null)
+        public IEnumerable<KeyValuePair<string, string>> GetRatesTable(string currencyList = null)
         {
+            Dictionary<string, string> result = new Dictionary<string, string>();
             if (currencyList == null)
             {
-                return this.exchangeRates;
+                foreach (string currency in this.exchangeRates.Keys)
+                {
+                    result.Add(currency, String.Format("{0:0.0000}", this.exchangeRates[currency]));
+                }
             }
             else 
             {
-                Dictionary<string, decimal> result = new Dictionary<string, decimal>();
                 currencyList = currencyList.ToUpper();
-                char[] delimiter = {',', ' ', ';'}; //just in case some one don't know what comma delimited is
+                char[] delimiter = {',', ' ', ';'}; //just in case some one don't know what comma separated is
                 string[] list = currencyList.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string currency in list)
                 {
                     currency.Trim();
                     CheckCurrency(currency);
-                    result.Add(currency, this.exchangeRates[currency]);
+                    result.Add(currency, String.Format("{0:0.0000}", this.exchangeRates[currency]));
                 }
-                return result;
             }
+            return result;
         }
 
         //Gets the list of currencies. If sorted is true, the returned list is sorted. False by default
-        //returns List<string> of all available currencies 
+        //returns IEnumerable<string> of all available currencies 
 
-        public List<string> GetCurrencyList(bool sorted = false)
+        public IEnumerable<string> GetCurrencyList(bool sorted = false)
         {
             List<string> currencyList = new List<string>(this.exchangeRates.Keys);
             if (sorted)
