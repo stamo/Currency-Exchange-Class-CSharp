@@ -39,10 +39,10 @@ namespace CurrencyConverter
 
         //Gets the rates table based on Base currency
         //param string currencyList - list of comma separated Currencies to be included in the table. All currencies by default
-        //returns IEnumerable<KeyValuePair<string, string>> containing desired currencies and rates
+        //returns IEnumerable<Rates> containing desired currencies and rates
         //Throws ApplicationException if currency is not in currency list
 
-        IEnumerable<KeyValuePair<string, string>> GetRatesTable(string currencyList = null);
+        IEnumerable<Rates> GetRatesTable(string currencyList = null);
 
         //Gets the list of currencies. If sorted is true, the returned list is sorted. False by default
         //returns IEnumerable<string> of all available currencies 

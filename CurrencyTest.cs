@@ -30,12 +30,12 @@ namespace CurrencyConverter
             Console.WriteLine("-------- CrossRate(\"EUR\") Test -------\n");
             Console.WriteLine(ratetable.CrossRate("EUR"));
             Console.WriteLine();
-            Console.WriteLine("GetRatesTable(\"eur, bgn; usd,gbp\") Test\n");
-            IEnumerable<KeyValuePair<string, string>> customRates;
-            customRates = ratetable.GetRatesTable("eur, bgn; usd,gbp");
+            Console.WriteLine("GetRatesTable(\"eur, bgn; usd,gbp CHF  \") Test\n");
+            IEnumerable<Rates> customRates;
+            customRates = ratetable.GetRatesTable("eur, bgn; usd,gbp CHF  ");
             foreach (var rate in customRates)
             {
-                Console.WriteLine("{0} = {1}", rate.Key, rate.Value);
+                Console.WriteLine("{0} = {1}", rate.Currency, rate.Rate);
             }
         }
     }

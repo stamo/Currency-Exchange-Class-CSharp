@@ -186,17 +186,20 @@ namespace CurrencyConverter
 
        //Gets the rates table based on Base currency
        //param string currencyList - list of comma separated Currencies to be included in the table. All currencies by default
-       //returns IEnumerable<KeyValuePair<string, string>> containing desired currencies and rates
+       //returns IEnumerable<Rates> containing desired currencies and rates
        //Throws ApplicationException if currency is not in currency list
 
-        public IEnumerable<KeyValuePair<string, string>> GetRatesTable(string currencyList = null)
+        public IEnumerable<Rates> GetRatesTable(string currencyList = null)
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
+            List<Rates> result = new List<Rates>();
+            Rates tempRate = new Rates();
             if (currencyList == null)
             {
                 foreach (string currency in this.exchangeRates.Keys)
                 {
-                    result.Add(currency, String.Format("{0:0.0000}", this.exchangeRates[currency]));
+                    tempRate.Currency = currency;
+                    tempRate.Rate = String.Format("{0:0.0000}", this.exchangeRates[currency]);
+                    result.Add(tempRate);
                 }
             }
             else 
@@ -208,7 +211,9 @@ namespace CurrencyConverter
                 {
                     currency.Trim();
                     CheckCurrency(currency);
-                    result.Add(currency, String.Format("{0:0.0000}", this.exchangeRates[currency]));
+                    tempRate.Currency = currency;
+                    tempRate.Rate = String.Format("{0:0.0000}", this.exchangeRates[currency]);
+                    result.Add(tempRate);
                 }
             }
             return result;

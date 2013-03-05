@@ -48,12 +48,12 @@ Return: the cross rate on success
 
 Exceptions: Throws ApplicationException if currency code is not in currency list
 
-`public IEnumerable<KeyValuePair<string, string>> GetRatesTable(string currencyList = null)` 
+`public IEnumerable<Rates> GetRatesTable(string currencyList = null)` 
 This method generates a replica of rates table based on Base currency. You can specify the list of currencies you need. You can use it for display purposes. 
 
 Parameters: `currencyList ` comma separated list of Currencies to be included in the table. All currencies by default. In general you want need to show all currencies provided by ECB, so you can choose which to show by submitting a string list with currency codes.
 
-Return: IEnumerable<KeyValuePair<string, string>> which contains currency code as key and rate as value in format 0.0000. 
+Return: IEnumerable<Rates> which contains currency code as Rates.Currency and rate as Rates.Rate in format 0.0000. 
 Exceptions: Throws ApplicationException if some of currency codes are not in currency list
 
 `public IEnumerable<string> GetCurrencyList(bool sorted = false)`
